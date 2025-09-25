@@ -50,6 +50,7 @@ const generateApiKey = async () => {
     Logger.warn(
       "🔑 Please save this key securely. It will not be shown again."
     );
+    await new Promise((resolve) => setTimeout(resolve, 200));
     process.exit(0);
   } catch (error) {
     Logger.error("❌ Failed to generate API key:", error);

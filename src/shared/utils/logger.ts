@@ -14,7 +14,7 @@ if (!fs.existsSync(dir)) {
   fs.mkdirSync(dir);
 }
 
-const logLevel = config.nodeEnv === "development" ? "debug" : "warn";
+const logLevel = config.nodeEnv === "development" ? "debug" : "info";
 
 const consoleFormat = format.printf(
   ({ level, message, timestamp: ts, ...metadata }) => {
