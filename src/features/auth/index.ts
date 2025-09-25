@@ -48,4 +48,4 @@ export {
   type ForgotPasswordRequest,
   type ResetPasswordRequest,
   type ChangePasswordRequest,
-} from "./schemas/auth.schemas";
+} from "./dto/auth.schemas";

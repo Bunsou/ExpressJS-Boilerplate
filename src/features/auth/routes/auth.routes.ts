@@ -7,8 +7,9 @@ import {
   authRateLimit,
   strictRateLimit,
 } from "../middleware/auth.middleware";
-import { validateRequest } from "../schemas/auth.schemas";
-import * as schemas from "../schemas/auth.schemas";
+
+import * as schemas from "../dto/auth.schemas";
+import { validateRequestBody } from "../../../shared/utils/validator";
 
 const router = Router();
 
@@ -16,30 +17,30 @@ const router = Router();
 router.post(
   "/register",
   authRateLimit,
-  validateRequest(schemas.registerRequestSchema),
+  validateRequestBody(schemas.registerRequestSchema),
   controller.register
 );
 router.post(
   "/verify-email",
   authRateLimit,
-  validateRequest(schemas.verifyEmailRequestSchema),
+  validateRequestBody(schemas.verifyEmailRequestSchema),
   controller.verifyEmailAddress
 );
 router.post(
   "/resend-verification",
   strictRateLimit,
-  validateRequest(schemas.resendVerificationEmailSchema),
+  validateRequestBody(schemas.resendVerificationEmailSchema),
   controller.resendVerificationEmail
 );
 router.post(
   "/login",
   authRateLimit,
-  validateRequest(schemas.loginRequestSchema),
+  validateRequestBody(schemas.loginRequestSchema),
   controller.login
 );
 router.post(
   "/refresh",
-  validateRequest(schemas.refreshTokenRequestSchema),
+  validateRequestBody(schemas.refreshTokenRequestSchema),
   controller.refreshToken
 );
 
@@ -47,19 +48,19 @@ router.post(
 router.post(
   "/forgot-password",
   strictRateLimit,
-  validateRequest(schemas.forgotPasswordRequestSchema),
+  validateRequestBody(schemas.forgotPasswordRequestSchema),
   controller.forgotPassword
 );
 router.post(
   "/verify-reset-code",
   authRateLimit,
-  validateRequest(schemas.verifyResetCodeRequestSchema),
+  validateRequestBody(schemas.verifyResetCodeRequestSchema),
   controller.verifyResetCode
 );
 router.post(
   "/reset-password",
   authRateLimit,
-  validateRequest(schemas.resetPasswordRequestSchema),
+  validateRequestBody(schemas.resetPasswordRequestSchema),
   controller.resetPassword
 );
 
@@ -67,7 +68,7 @@ router.post(
 router.use(requireAuth); // All routes below this require authentication
 router.post(
   "/logout",
-  validateRequest(schemas.refreshTokenRequestSchema),
+  validateRequestBody(schemas.refreshTokenRequestSchema),
   controller.logout
 );
 router.post("/logout-all", controller.logoutAll);
@@ -75,7 +76,7 @@ router.get("/me", controller.getCurrentUser);
 router.get("/admin-only", requireAdmin, controller.adminOnly);
 router.post(
   "/change-password",
-  validateRequest(schemas.changePasswordRequestSchema),
+  validateRequestBody(schemas.changePasswordRequestSchema),
   controller.changePasswordHandler
 );
 

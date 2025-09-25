@@ -6,7 +6,7 @@ import { AppError } from "../../../shared/utils/errorHandler";
 import * as authService from "../services/auth.service";
 import { findUserById } from "../repositories/auth.repository";
 import type { AuthenticatedRequest } from "../../../shared/types/auth.types";
-import type * as schemas from "../schemas/auth.schemas";
+import type * as schemas from "../dto/auth.schemas";
 
 export const register = async (req: Request, res: Response) => {
   const result = await authService.registerUser(

@@ -1,5 +1,5 @@
 // Path: src/features/auth/schemas/auth.schemas.ts
-import { z } from "zod";
+import { z, ZodSchema } from "zod";
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "../../../shared/utils/errorHandler";
 
@@ -78,18 +78,3 @@ export type AuthResponse = {
   tokens: z.infer<typeof tokenSchema>;
 };
 export type TokenRefreshResponse = { tokens: z.infer<typeof tokenSchema> };
-
-// --- Validation Middleware ---
-export const validateRequest =
-  (schema: z.AnyZodObject) =>
-  (req: Request, res: Response, next: NextFunction) => {
-    try {
-      schema.parse(req.body);
-      next();
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        throw new AppError("VALIDATION_ERROR", error.errors[0].message);
-      }
-      next(error);
-    }
-  };

@@ -5,7 +5,7 @@ import { AppError } from "../../../shared/utils/errorHandler";
 import * as jwt from "./jwt.service";
 import * as email from "./email.service";
 import * as repo from "../repositories/auth.repository";
-import type * as schemas from "../schemas/auth.schemas";
+import type * as schemas from "../dto/auth.schemas";
 import { config } from "../../../shared/config/config";
 
 const BCRYPT_SALT_ROUNDS = parseInt(config.bcryptSaltRounds || "12");
