@@ -1,11 +1,11 @@
 // Path: src/server.ts
-import "dotenv/config";
 import app from "./app";
 import { logger } from "./shared/utils/logger";
 import { initializeAuthFeature } from "./features/auth";
 import { startCronJobs } from "./features/auth/services/cron.service";
+import { config } from "./shared/config/config";
 
-const PORT = process.env.PORT || 5000;
+const PORT = config.port || 5000;
 
 /**
  * Initializes features and starts the HTTP server.

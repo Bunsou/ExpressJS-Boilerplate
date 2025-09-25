@@ -6,8 +6,9 @@ import * as jwt from "./jwt.service";
 import * as email from "./email.service";
 import * as repo from "../repositories/auth.repository";
 import type * as schemas from "../schemas/auth.schemas";
+import { config } from "../../../shared/config/config";
 
-const BCRYPT_SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS || "12");
+const BCRYPT_SALT_ROUNDS = parseInt(config.bcryptSaltRounds || "12");
 
 // --- Registration ---
 export async function registerUser(data: schemas.RegisterRequest) {

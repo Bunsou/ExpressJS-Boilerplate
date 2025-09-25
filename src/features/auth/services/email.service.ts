@@ -3,13 +3,14 @@ import nodemailer from "nodemailer";
 import { logger } from "../../../shared/utils/logger";
 import { AppError } from "../../../shared/utils/errorHandler";
 import { createEmailVerification } from "../repositories/auth.repository";
+import { config } from "../../../shared/config/config";
 
 // --- Nodemailer Transporter Setup ---
 const transporter = nodemailer.createTransport({
-  host: process.env.GMAIL_HOST,
+  host: config.gmailHost,
   port: 587,
   secure: false,
-  auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_PASS },
+  auth: { user: config.gmailUser, pass: config.gmailPass },
 });
 
 const generateVerificationCode = () =>
@@ -26,7 +27,7 @@ const emailHTMLTemplate = (title: string, message: string, code: string) => `
 const sendEmail = async (to: string, subject: string, html: string) => {
   try {
     await transporter.sendMail({
-      from: `"Kitevent" <${process.env.FROM_EMAIL}>`,
+      from: `"Kitevent" <${config.fromEmail}>`,
       to,
       subject,
       html,

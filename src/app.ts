@@ -6,11 +6,12 @@ import { AppError } from "./shared/utils/errorHandler";
 import { sendErrorResponse } from "./shared/utils/responseHandler";
 import { requestLogger, errorLogger } from "./shared/utils/logger";
 import { authRoutes } from "./features/auth";
+import { config } from "./shared/config/config";
 
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+app.use(cors({ origin: config.frontendUrl, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -19,7 +20,7 @@ app.use(requestLogger);
 // --- API ROUTES ---
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({
-    message: `API is running in ${process.env.NODE_ENV} mode.`,
+    message: `API is running in ${config.nodeEnv} mode.`,
     timestamp: new Date().toISOString(),
   });
 });

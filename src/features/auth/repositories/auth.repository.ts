@@ -10,10 +10,9 @@ import {
   User,
 } from "../../../drizzle/schema";
 import { hashToken } from "../services/jwt.service";
+import { config } from "../../../shared/config/config";
 
-const JWT_REFRESH_EXPIRY = parseInt(
-  process.env.JWT_REFRESH_EXPIRY || "1209600"
-);
+const JWT_REFRESH_EXPIRY = parseInt(config.jwtRefreshExpiry || "1209600");
 
 // --- User Repo ---
 export const createUser = async (data: NewUser) => {

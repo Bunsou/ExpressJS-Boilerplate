@@ -1,6 +1,7 @@
 // Path: src/shared/utils/logger.ts
 import winston from "winston";
 import { Request, Response, NextFunction, ErrorRequestHandler } from "express";
+import { config } from "../config/config";
 
 const { combine, timestamp, printf, colorize, align, json } = winston.format;
 
@@ -18,7 +19,7 @@ const consoleFormat = printf(
 
 const transports: winston.transport[] = [
   new winston.transports.Console({
-    level: process.env.NODE_ENV === "production" ? "info" : "debug",
+    level: config.nodeEnv === "production" ? "info" : "debug",
     format: combine(
       colorize(),
       align(),
@@ -28,7 +29,7 @@ const transports: winston.transport[] = [
   }),
 ];
 
-if (process.env.NODE_ENV === "production") {
+if (config.nodeEnv === "production") {
   transports.push(
     new winston.transports.File({
       filename: "logs/error.log",

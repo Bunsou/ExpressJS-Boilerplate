@@ -2,14 +2,13 @@
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { AppError } from "../../../shared/utils/errorHandler";
+import { config } from "../../../shared/config/config";
 
 // --- Config Variables ---
-const JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET!;
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET!;
-const JWT_ACCESS_EXPIRY = parseInt(process.env.JWT_ACCESS_EXPIRY || "900");
-const JWT_REFRESH_EXPIRY = parseInt(
-  process.env.JWT_REFRESH_EXPIRY || "1209600"
-);
+const JWT_ACCESS_SECRET = config.jwtAccessSecret!;
+const JWT_REFRESH_SECRET = config.jwtRefreshSecret!;
+const JWT_ACCESS_EXPIRY = parseInt(config.jwtAccessExpiry || "900");
+const JWT_REFRESH_EXPIRY = parseInt(config.jwtRefreshExpiry || "1209600");
 
 // --- Types ---
 export interface JWTPayload {

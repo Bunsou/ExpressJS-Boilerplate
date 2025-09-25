@@ -7,6 +7,7 @@ import {
   extractTokenFromHeader,
 } from "../services/jwt.service";
 import type { AuthenticatedRequest } from "../../../shared/types/auth.types";
+import { config } from "../../../shared/config/config";
 
 export const requireAuth = async (
   req: AuthenticatedRequest,
@@ -35,7 +36,7 @@ const createRateLimiter = (limit: number, message: string) =>
   rateLimit({
     windowMs: 15 * 60 * 1000,
     // Use a more lenient limit in development to avoid interruptions
-    limit: process.env.NODE_ENV === "development" ? limit * 10 : limit,
+    limit: config.nodeEnv === "development" ? limit * 10 : limit,
     message: { error: { code: "RATE_LIMIT_EXCEEDED", message } },
     standardHeaders: "draft-7",
     legacyHeaders: false,
