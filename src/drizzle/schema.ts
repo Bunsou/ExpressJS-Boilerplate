@@ -7,12 +7,18 @@ import {
   boolean,
   timestamp,
   pgEnum,
+  integer,
 } from "drizzle-orm/pg-core";
 
 export const userRoleEnum = pgEnum("user_role", ["student", "admin"]);
 export const verificationTypeEnum = pgEnum("verification_type", [
   "registration",
   "password_reset",
+]);
+export const apiKeyPermissionEnum = pgEnum("api_key_permission", [
+  "general",
+  "data:read",
+  "data:write",
 ]);
 
 export const usersTable = pgTable("users", {
@@ -47,9 +53,22 @@ export const emailVerificationsTable = pgTable("email_verifications", {
   created_at: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const apiKeysTable = pgTable("api_keys", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  key: text("key").unique().notNull(), // The API key itself
+  version: integer("version").notNull().default(1),
+  permissions: apiKeyPermissionEnum("permissions").array().notNull(),
+  status: boolean("status").notNull().default(true), // active or disabled
+  last_used_at: timestamp("last_used_at"),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+});
+
 export type User = typeof usersTable.$inferSelect;
 export type NewUser = typeof usersTable.$inferInsert;
 export type RefreshToken = typeof refreshTokensTable.$inferSelect;
 export type NewRefreshToken = typeof refreshTokensTable.$inferInsert;
 export type EmailVerification = typeof emailVerificationsTable.$inferSelect;
 export type NewEmailVerification = typeof emailVerificationsTable.$inferInsert;
+export type ApiKey = typeof apiKeysTable.$inferSelect;
+export type NewApiKey = typeof apiKeysTable.$inferInsert;

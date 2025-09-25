@@ -8,6 +8,13 @@
       "when": 1758801811771,
       "tag": "0000_orange_firestar",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1758842235438,
+      "tag": "0001_spotty_diamondback",
+      "breakpoints": true
     }
   ]
 }

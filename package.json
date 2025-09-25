@@ -9,7 +9,9 @@
     "start": "node dist/server.js",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "api-key:create": "tsx scripts/generate-api-key.ts"
   },
   "keywords": [],
   "author": "Bunsou",

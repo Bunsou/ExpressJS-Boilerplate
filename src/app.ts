@@ -7,6 +7,7 @@ import { sendErrorResponse } from "./shared/utils/responseHandler";
 import { requestLogger, errorLogger } from "./shared/utils/logger";
 import { authRoutes } from "./features/auth";
 import { config } from "./shared/config/config";
+import { dataRoutes } from "./features/data";
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/auth", authRoutes);
+app.use("/data", dataRoutes);
 
 // --- GLOBAL ERROR HANDLING ---
 // This middleware is used first to log any errors that are passed to next()
