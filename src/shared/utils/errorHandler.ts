@@ -1,5 +1,4 @@
 // Path: src/shared/utils/errorHandler.ts
-import { Request, Response, NextFunction } from "express";
 
 const ERROR_MAP = {
   VALIDATION_ERROR: { statusCode: 400, message: "Invalid input provided." },

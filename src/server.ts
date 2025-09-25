@@ -1,6 +1,6 @@
 // Path: src/server.ts
 import app from "./app";
-import { logger } from "./shared/utils/logger";
+import { Logger } from "./shared/utils/logger";
 import { initializeAuthFeature } from "./features/auth";
 import { startCronJobs } from "./features/auth/services/cron.service";
 import { config } from "./shared/config/config";
@@ -18,12 +18,12 @@ const startServer = async () => {
 
     // Start listening for incoming requests
     app.listen(PORT, () => {
-      logger.info(`🚀 Server is running on http://localhost:${PORT}`);
+      Logger.info(`🚀 Server is running on http://localhost:${PORT}`);
       // After the server is successfully running, start the scheduled jobs
       startCronJobs();
     });
   } catch (error) {
-    logger.error("❌ Failed to initialize features and start server:", error);
+    Logger.error("❌ Failed to initialize features and start server:", error);
     process.exit(1); // Exit the process with an error code
   }
 };

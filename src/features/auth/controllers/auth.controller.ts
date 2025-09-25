@@ -1,6 +1,6 @@
 // Path: src/features/auth/controllers/auth.controller.ts
 import { Request, Response } from "express";
-import { logger } from "../../../shared/utils/logger";
+import { Logger } from "../../../shared/utils/logger";
 import { sendSuccessResponse } from "../../../shared/utils/responseHandler";
 import { AppError } from "../../../shared/utils/errorHandler";
 import * as authService from "../services/auth.service";

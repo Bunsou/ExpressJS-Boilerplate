@@ -1,6 +1,6 @@
 // Path: src/features/auth/services/email.service.ts
 import nodemailer from "nodemailer";
-import { logger } from "../../../shared/utils/logger";
+import { Logger } from "../../../shared/utils/logger";
 import { AppError } from "../../../shared/utils/errorHandler";
 import { createEmailVerification } from "../repositories/auth.repository";
 import { config } from "../../../shared/config/config";
@@ -32,9 +32,9 @@ const sendEmail = async (to: string, subject: string, html: string) => {
       subject,
       html,
     });
-    logger.info(`Email sent to ${to}`);
+    Logger.info(`Email sent to ${to}`);
   } catch (error) {
-    logger.error(`Email service error for ${to}:`, error);
+    Logger.error(`Email service error for ${to}:`, error);
     throw new AppError("EMAIL_SERVICE_ERROR");
   }
 };

@@ -1,12 +1,12 @@
-import { logger } from "../../shared/utils/logger";
+import { Logger } from "../../shared/utils/logger";
 import { validateJWTConfig } from "./services/jwt.service";
 
 export async function initializeAuthFeature(): Promise<void> {
   try {
     validateJWTConfig();
-    logger.info("✅ Authentication feature initialized successfully.");
+    Logger.info("✅ Authentication feature initialized successfully.");
   } catch (error) {
-    logger.error("❌ Failed to initialize authentication feature:", error);
+    Logger.error("❌ Failed to initialize authentication feature:", error);
     throw error;
   }
 }

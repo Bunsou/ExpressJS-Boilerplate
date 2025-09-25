@@ -1,6 +1,6 @@
 // Path: src/features/auth/services/auth.service.ts
 import bcrypt from "bcryptjs";
-import { logger } from "../../../shared/utils/logger";
+import { Logger } from "../../../shared/utils/logger";
 import { AppError } from "../../../shared/utils/errorHandler";
 import * as jwt from "./jwt.service";
 import * as email from "./email.service";
@@ -38,7 +38,7 @@ export async function verifyEmail(data: schemas.VerifyEmailRequest) {
 
   email
     .sendWelcomeEmail(user.email, user.full_name)
-    .catch((e) => logger.error("Failed to send welcome email", e));
+    .catch((e) => Logger.error("Failed to send welcome email", e));
   const { password_hash, ...userProfile } = updatedUser;
   return { message: "Email verified successfully.", user: userProfile };
 }
@@ -81,7 +81,7 @@ export async function refreshAccessToken(
     jwt.hashToken(data.refreshToken)
   );
   if (!existingToken) {
-    logger.warn(
+    Logger.warn(
       `Potential refresh token reuse for user: ${user.id}. Invalidating all sessions.`
     );
     await repo.deleteAllUserRefreshTokens(user.id);
@@ -180,7 +180,7 @@ export async function changePassword(
 
     await repo.deleteAllUserRefreshTokens(userId);
 
-    logger.info(`Password changed successfully for user: ${user.email}`, {
+    Logger.info(`Password changed successfully for user: ${user.email}`, {
       userId,
     });
 
@@ -189,7 +189,7 @@ export async function changePassword(
         "Password changed successfully. You may need to log in again on other devices.",
     };
   } catch (error) {
-    logger.error("Failed to change password:", { error, userId });
+    Logger.error("Failed to change password:", { error, userId });
     if (error instanceof AppError) {
       throw error;
     }
