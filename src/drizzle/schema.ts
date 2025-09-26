@@ -9,6 +9,7 @@ import {
   pgEnum,
   integer,
 } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
 export const userRoleEnum = pgEnum("user_role", ["student", "admin"]);
 export const verificationTypeEnum = pgEnum("verification_type", [
@@ -29,6 +30,20 @@ export const usersTable = pgTable("users", {
   role: userRoleEnum("role").default("student").notNull(),
   email_verified: boolean("email_verified").default(false).notNull(),
   last_login: timestamp("last_login"),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at").defaultNow().notNull(),
+  bio: text("bio"),
+  avatar_url: varchar("avatar_url", { length: 255 }),
+});
+
+export const postsTable = pgTable("posts", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  user_id: uuid("user_id")
+    .references(() => usersTable.id, { onDelete: "cascade" }) // Foreign key
+    .notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  content: text("content").notNull(),
+  published_at: timestamp("published_at"),
   created_at: timestamp("created_at").defaultNow().notNull(),
   updated_at: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -64,6 +79,17 @@ export const apiKeysTable = pgTable("api_keys", {
   updated_at: timestamp("updated_at").defaultNow().notNull(),
 });
 
+// This tells Drizzle how users and posts are related
+export const usersRelations = relations(usersTable, ({ many }) => ({
+  posts: many(postsTable),
+}));
+export const postsRelations = relations(postsTable, ({ one }) => ({
+  author: one(usersTable, {
+    fields: [postsTable.user_id],
+    references: [usersTable.id],
+  }),
+}));
+
 export type User = typeof usersTable.$inferSelect;
 export type NewUser = typeof usersTable.$inferInsert;
 export type RefreshToken = typeof refreshTokensTable.$inferSelect;
@@ -73,3 +99,5 @@ export type NewEmailVerification = typeof emailVerificationsTable.$inferInsert;
 export type ApiKey = typeof apiKeysTable.$inferSelect;
 export type NewApiKey = typeof apiKeysTable.$inferInsert;
 export type UserRole = (typeof userRoleEnum.enumValues)[number];
+export type Post = typeof postsTable.$inferSelect;
+export type NewPost = typeof postsTable.$inferInsert;

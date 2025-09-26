@@ -15,6 +15,13 @@
       "when": 1758842235438,
       "tag": "0001_spotty_diamondback",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1758895853347,
+      "tag": "0002_shallow_starhawk",
+      "breakpoints": true
     }
   ]
 }

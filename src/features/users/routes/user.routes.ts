@@ -1,20 +1,36 @@
-// Path: src/features/users/user.routes.ts
 import { Router } from "express";
 import * as controller from "../controllers/user.controller";
-import { requireAuth } from "../../auth/middlewares/auth.middleware";
-import { requireRole } from "../../auth/middlewares/auth.middleware";
+import * as schemas from "../dto/user.schemas";
+import {
+  requireAuth,
+  requireRole,
+} from "../../auth/middlewares/auth.middleware";
+import {
+  validateRequestBody,
+  validateRequestParams,
+} from "../../../shared/utils/validator";
 
 const router = Router();
 
-// All routes in this file require the user to be logged in first.
-router.use(requireAuth);
+router.use(requireAuth); // All user routes require authentication
 
-// 1. Get My Profile (Any authenticated user can access this)
-// We only need `requireAuth` here. No `requireRole` is necessary.
 router.get("/me", controller.getMyProfile);
+router.patch(
+  "/me",
+  validateRequestBody(schemas.updateProfileSchema),
+  controller.updateMyProfile
+);
 
-// 2. Get All Users (Only Admins can access this)
-// The request must pass `requireAuth` AND `requireRole(['admin'])`.
-router.get("/", requireRole(["admin"]), controller.getAllUsers);
+router.get(
+  "/",
+  requireRole(["admin"]), // Only admins can get all users
+  controller.getAllUsers
+);
+
+router.get(
+  "/:id",
+  validateRequestParams(schemas.userIdParamSchema),
+  controller.getUserById
+);
 
 export const userRoutes = router;

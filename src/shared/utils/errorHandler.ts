@@ -40,6 +40,7 @@ const ERROR_MAP = {
     message: "An unexpected error occurred.",
   },
   EMAIL_SERVICE_ERROR: { statusCode: 500, message: "Failed to send email." },
+  NOT_FOUND: { statusCode: 404, message: "Resource not found." },
 };
 
 export type AppErrorCode = keyof typeof ERROR_MAP;
