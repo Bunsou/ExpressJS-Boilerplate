@@ -11,7 +11,9 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "api-key:create": "tsx scripts/generate-api-key.ts"
+    "api-key:create": "tsx scripts/generate-api-key.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "keywords": [],
   "author": "Bunsou",
@@ -44,6 +46,9 @@
     "@types/node": "^24.5.2",
     "@types/node-cron": "^3.0.11",
     "@types/nodemailer": "^7.0.1",
-    "@types/pg": "^8.15.5"
+    "@types/pg": "^8.15.5",
+    "@types/supertest": "^6.0.3",
+    "supertest": "^7.1.4",
+    "vitest": "^3.2.4"
   }
 }
