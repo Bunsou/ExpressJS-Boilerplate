@@ -72,3 +72,4 @@ export type EmailVerification = typeof emailVerificationsTable.$inferSelect;
 export type NewEmailVerification = typeof emailVerificationsTable.$inferInsert;
 export type ApiKey = typeof apiKeysTable.$inferSelect;
 export type NewApiKey = typeof apiKeysTable.$inferInsert;
+export type UserRole = (typeof userRoleEnum.enumValues)[number];

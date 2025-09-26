@@ -3,7 +3,7 @@ import { Router } from "express";
 import * as controller from "../controllers/auth.controller";
 import {
   requireAuth,
-  requireAdmin,
+  requireRole,
   authRateLimit,
   strictRateLimit,
 } from "../middleware/auth.middleware";
@@ -73,7 +73,7 @@ router.post(
 );
 router.post("/logout-all", controller.logoutAll);
 router.get("/me", controller.getCurrentUser);
-router.get("/admin-only", requireAdmin, controller.adminOnly);
+router.get("/admin-only", requireRole(["admin"]), controller.adminOnly);
 router.post(
   "/change-password",
   validateRequestBody(schemas.changePasswordRequestSchema),

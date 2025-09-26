@@ -8,28 +8,49 @@ import {
 } from "../services/jwt.service";
 import type { AuthenticatedRequest } from "../../../shared/types/auth.types";
 import { config } from "../../../shared/config/config";
+import { UserRole } from "../../../drizzle/schema";
 
 export const requireAuth = async (
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const token = extractTokenFromHeader(req.headers.authorization);
-  if (!token) throw new AppError("TOKEN_INVALID");
+  try {
+    const token = extractTokenFromHeader(req.headers.authorization);
+    if (!token) throw new AppError("TOKEN_INVALID");
 
-  const decoded = verifyAccessToken(token);
-  req.user = { id: decoded.userId, email: decoded.email, role: decoded.role };
-  next();
+    const decoded = verifyAccessToken(token);
+    req.user = { id: decoded.userId, email: decoded.email, role: decoded.role };
+    next();
+  } catch (error) {
+    next(error);
+  }
 };
 
-export const requireAdmin = (
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-): void => {
-  if (req.user?.role !== "admin")
-    throw new AppError("INSUFFICIENT_PERMISSIONS");
-  next();
+export const requireRole = (requiredRoles: UserRole[]) => {
+  return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+      const user = req.user;
+
+      if (!user) {
+        throw new AppError(
+          "TOKEN_INVALID",
+          "Authentication is required to check roles."
+        );
+      }
+
+      if (!requiredRoles.includes(user.role)) {
+        throw new AppError(
+          "INSUFFICIENT_PERMISSIONS",
+          "You do not have the necessary permissions to access this resource."
+        );
+      }
+
+      next();
+    } catch (error) {
+      next(error);
+    }
+  };
 };
 
 const createRateLimiter = (limit: number, message: string) =>

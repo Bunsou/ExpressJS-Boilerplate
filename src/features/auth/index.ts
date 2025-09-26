@@ -15,7 +15,7 @@ export async function initializeAuthFeature(): Promise<void> {
 export { authRoutes } from "./routes/auth.routes";
 
 // MIDDLEWARE
-export { requireAuth, requireAdmin } from "./middleware/auth.middleware";
+export { requireAuth, requireRole } from "./middleware/auth.middleware";
 
 // SERVICES
 export {
