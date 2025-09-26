@@ -1,8 +1,8 @@
 // Path: src/features/users/user.routes.ts
 import { Router } from "express";
 import * as controller from "../controllers/user.controller";
-import { requireAuth } from "../../auth/middleware/auth.middleware";
-import { requireRole } from "../../auth/middleware/auth.middleware";
+import { requireAuth } from "../../auth/middlewares/auth.middleware";
+import { requireRole } from "../../auth/middlewares/auth.middleware";
 
 const router = Router();
 

@@ -3,7 +3,7 @@ import * as controller from "../controllers/data.controller";
 import {
   requireApiKey,
   requirePermission,
-} from "../../auth/middleware/apiKey.middleware";
+} from "../../auth/middlewares/apiKey.middleware";
 
 const router = Router();
 

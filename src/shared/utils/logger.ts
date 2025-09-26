@@ -67,11 +67,15 @@ export const requestLogger = (
   res: Response,
   next: NextFunction
 ) => {
-  Logger.info(`HTTP Request: ${req.method} ${req.originalUrl}`, {
-    ip: req.ip,
-    body: req.body,
-  });
-  next();
+  try {
+    Logger.info(`HTTP Request: ${req.method} ${req.originalUrl}`, {
+      ip: req.ip,
+      body: req.body,
+    });
+    next();
+  } catch (error) {
+    next(error);
+  }
 };
 
 // errorLogger: Logs errors that are passed to the global error handler.

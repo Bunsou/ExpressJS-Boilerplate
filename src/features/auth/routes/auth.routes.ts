@@ -6,7 +6,7 @@ import {
   requireRole,
   authRateLimit,
   strictRateLimit,
-} from "../middleware/auth.middleware";
+} from "../middlewares/auth.middleware";
 
 import * as schemas from "../dto/auth.schemas";
 import { validateRequestBody } from "../../../shared/utils/validator";
