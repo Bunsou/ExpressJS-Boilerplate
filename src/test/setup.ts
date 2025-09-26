@@ -5,6 +5,7 @@ import { Pool } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-serverless";
 import { migrate } from "drizzle-orm/neon-serverless/migrator";
 import * as schema from "../drizzle/schema";
+import { Logger } from "../shared/utils/logger";
 
 // Load environment variables from .env.test for the test suite
 config({ path: resolve(__dirname, "../../.env.test") });
@@ -20,9 +21,9 @@ export const testDb = drizzle(pool, { schema });
 
 // Run migrations once before all tests
 beforeAll(async () => {
-  console.log("🚀 Migrating test database...");
+  Logger.info("🚀 Migrating test database...");
   await migrate(testDb, { migrationsFolder: "./src/drizzle/migrations" });
-  console.log("✅ Test database migrated.");
+  Logger.info("✅ Test database migrated.");
 });
 
 // Clean up the database after each test file
@@ -39,5 +40,5 @@ afterEach(async () => {
 // Disconnect from the database after all tests have run
 afterAll(async () => {
   await pool.end();
-  console.log("Disconnected from test database.");
+  Logger.info("Disconnected from test database.");
 });
