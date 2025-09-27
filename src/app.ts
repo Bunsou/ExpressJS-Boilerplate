@@ -9,6 +9,7 @@ import { authRoutes } from "./features/auth";
 import { config } from "./shared/config/config";
 import { userRoutes } from "./features/users";
 import { postRoutes } from "./features/posts";
+import { swaggerRoutes } from "./shared/utils/swagger";
 
 const app = express();
 
@@ -26,6 +27,8 @@ app.get("/", (req: Request, res: Response) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+app.use("/docs", swaggerRoutes);
 
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
