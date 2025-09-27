@@ -1,9 +1,25 @@
 import { AppError } from "../../../shared/utils/errorHandler";
 import { CreatePostRequest, UpdatePostRequest } from "../dto/post.schemas";
 import * as repo from "../repositories/post.repository";
+import { redisClient } from "../../../shared/config/redis";
 
-export const createNewPost = (userId: string, data: CreatePostRequest) => {
-  return repo.createPost({ ...data, user_id: userId });
+// Helper for invalidating post-related caches
+const invalidatePostCaches = async (postId?: string) => {
+  const promises = [];
+  promises.push(redisClient.del("posts:all")); // Key for the list
+  if (postId) {
+    promises.push(redisClient.del(`post:${postId}`)); // Key for a single post
+  }
+  await Promise.all(promises);
+};
+
+export const createNewPost = async (
+  userId: string,
+  data: CreatePostRequest
+) => {
+  const newPost = await repo.createPost({ ...data, user_id: userId });
+  await invalidatePostCaches(); // Invalidate cache on create
+  return newPost;
 };
 
 export const getPostById = async (postId: string) => {
@@ -30,7 +46,9 @@ export const updateUserPost = async (
       "You can only edit your own posts."
     );
   }
-  return repo.updatePost(postId, data);
+  const updatedPost = await repo.updatePost(postId, data);
+  await invalidatePostCaches(postId); // Invalidate cache on update
+  return updatedPost;
 };
 
 export const deleteUserPost = async (
@@ -45,5 +63,6 @@ export const deleteUserPost = async (
       "You can only delete your own posts."
     );
   }
-  return repo.deletePost(postId);
+  await repo.deletePost(postId);
+  await invalidatePostCaches(postId); // Invalidate cache on delete
 };

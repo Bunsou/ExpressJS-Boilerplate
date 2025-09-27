@@ -21,4 +21,6 @@ export const config = {
 
   fromEmail: process.env.FROM_EMAIL || "",
   supportEmail: process.env.SUPPORT_EMAIL || "",
+
+  redisUrl: process.env.REDIS_URL || "redis://localhost:6379",
 };
