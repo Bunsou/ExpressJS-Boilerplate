@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  # 1. The API Service (your Express app)
+
+  api:
+    build: .
+    container_name: boilerplate-api
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./.env
+    environment:
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./src:/app/src
+    command: pnpm run dev
+    depends_on:
+      - db
+      - redis
+
+  # 2. The PostgreSQL Database Service
+  db:
+    image: postgres:15-alpine
+    container_name: boilerplate-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      # Persists database data across container restarts
+      - postgres_data:/var/lib/postgresql/data
+
+  # 3. The Redis Caching Service
+  redis:
+    image: redis:7-alpine
+    container_name: boilerplate-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      # Persists Redis data
+      - redis_data:/data
+
+# Define the named volumes for data persistence
+volumes:
+  postgres_data:
+  redis_data:

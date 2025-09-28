@@ -1,0 +1,25 @@
+# Dependency directories
+node_modules
+dist
+.pnpm-store
+
+# Logs
+logs
+*.log
+
+# Environment variables (these should be injected, not copied)
+.env
+.env.*
+!.env.example
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Git files
+.git
+.gitignore
+
+# Docker files
+Dockerfile
+docker-compose.yml
