@@ -9,7 +9,7 @@ import {
 import {
   validateRequestBody,
   validateRequestParams,
-} from "../../../shared/utils/validator";
+} from "../../../shared/middleware/validator";
 import { cacheMiddleware } from "../../../shared/middleware/cache.middleware";
 import { AuthenticatedRequest } from "../../../shared/types/auth.types";
 

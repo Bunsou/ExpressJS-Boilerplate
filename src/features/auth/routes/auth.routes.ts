@@ -9,7 +9,7 @@ import {
 } from "../middlewares/auth.middleware";
 
 import * as schemas from "../dto/auth.schemas";
-import { validateRequestBody } from "../../../shared/utils/validator";
+import { validateRequestBody } from "../../../shared/middleware/validator";
 
 const router = Router();
 

@@ -5,7 +5,7 @@ import { requireAuth } from "../../auth/middlewares/auth.middleware";
 import {
   validateRequestBody,
   validateRequestParams,
-} from "../../../shared/utils/validator";
+} from "../../../shared/middleware/validator";
 import { cacheMiddleware } from "../../../shared/middleware/cache.middleware";
 
 const router = Router();
