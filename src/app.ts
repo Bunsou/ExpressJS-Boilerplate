@@ -10,6 +10,10 @@ import { config } from "./shared/config/config";
 import { userRoutes } from "./features/users";
 import { postRoutes } from "./features/posts";
 import { swaggerRoutes } from "./shared/utils/swagger";
+import {
+  errorHandler,
+  notFoundHandler,
+} from "./shared/middleware/errorHandler";
 
 const app = express();
 
@@ -38,19 +42,10 @@ app.use("/posts", postRoutes);
 // This middleware is used first to log any errors that are passed to next()
 app.use(errorLogger);
 
-// This final error handler sends a formatted JSON response to the client
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  if (err instanceof AppError) {
-    sendErrorResponse(res, err);
-  } else {
-    // Handle unexpected, non-custom errors
-    const unexpectedError = new AppError(
-      "INTERNAL_SERVER_ERROR",
-      "An unexpected error occurred on the server.",
-      500
-    );
-    sendErrorResponse(res, unexpectedError);
-  }
-});
+// Then we handle 404 errors for unmatched routes
+app.use(notFoundHandler);
+
+// Finally, we handle all other errors
+app.use(errorHandler);
 
 export default app;
