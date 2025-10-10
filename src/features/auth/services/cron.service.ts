@@ -7,6 +7,7 @@ export const startCronJobs = () => {
   Logger.info("Scheduling cron jobs...");
 
   // Runs at 3:00 AM every day in the server's timezone.
+  // This will clean up expired tokens and verification records daily.
   cron.schedule("0 3 * * *", async () => {
     Logger.info("CRON: Starting daily cleanup job...");
     try {
