@@ -38,11 +38,7 @@ router.post(
   validateRequestBody(schemas.loginRequestSchema),
   controller.login
 );
-router.post(
-  "/refresh",
-  validateRequestBody(schemas.refreshTokenRequestSchema),
-  controller.refreshToken
-);
+router.post("/refresh", controller.refreshToken);
 
 // --- Password Reset ---
 router.post(
@@ -66,11 +62,7 @@ router.post(
 
 // --- Protected Routes ---
 router.use(requireAuth); // All routes below this require authentication
-router.post(
-  "/logout",
-  validateRequestBody(schemas.refreshTokenRequestSchema),
-  controller.logout
-);
+router.post("/logout", controller.logout);
 router.post("/logout-all", controller.logoutAll);
 router.get("/me", controller.getCurrentUser);
 router.get("/admin-only", requireRole(["admin"]), controller.adminOnly);

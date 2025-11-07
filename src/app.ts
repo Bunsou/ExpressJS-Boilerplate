@@ -2,6 +2,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
 import { AppError } from "./shared/utils/errorHandler";
 import { sendErrorResponse } from "./shared/utils/responseHandler";
 import { requestLogger, errorLogger } from "./shared/utils/logger";
@@ -19,6 +20,7 @@ const app = express();
 
 app.use(helmet());
 app.use(cors({ origin: config.frontendUrl, credentials: true }));
+app.use(cookieParser()); // Parse cookies from requests
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

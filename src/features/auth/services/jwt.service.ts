@@ -58,6 +58,10 @@ export const hashToken = (token: string) =>
   crypto.createHash("sha256").update(token).digest("hex");
 export const extractTokenFromHeader = (authHeader?: string) =>
   authHeader?.startsWith("Bearer ") ? authHeader.substring(7) : null;
+export const extractTokenFromCookie = (
+  cookies: Record<string, string>,
+  cookieName: string
+): string | null => cookies[cookieName] || null;
 
 /**
  * Validates essential JWT environment variables on application startup.

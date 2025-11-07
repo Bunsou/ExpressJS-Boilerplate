@@ -56,7 +56,7 @@ export async function resendVerificationCode(
 // --- Login/Logout ---
 export async function loginUser(
   data: schemas.LoginRequest
-): Promise<schemas.AuthResponse> {
+): Promise<schemas.TokenPairResult> {
   const user = await repo.findUserByEmail(data.email);
   if (!user || !(await bcrypt.compare(data.password, user.password_hash)))
     throw new AppError("INVALID_CREDENTIALS");
@@ -71,14 +71,14 @@ export async function loginUser(
 }
 
 export async function refreshAccessToken(
-  data: schemas.RefreshTokenRequest
-): Promise<schemas.TokenRefreshResponse> {
-  const decoded = jwt.verifyRefreshToken(data.refreshToken);
+  refreshToken: string
+): Promise<{ tokens: jwt.TokenPair }> {
+  const decoded = jwt.verifyRefreshToken(refreshToken);
   const user = await repo.findUserById(decoded.userId);
   if (!user) throw new AppError("USER_NOT_FOUND");
 
   const existingToken = await repo.findRefreshTokenByHash(
-    jwt.hashToken(data.refreshToken)
+    jwt.hashToken(refreshToken)
   );
   if (!existingToken) {
     Logger.warn(
@@ -98,9 +98,9 @@ export async function refreshAccessToken(
   return { tokens: newTokens };
 }
 
-export async function logoutUser(data: schemas.RefreshTokenRequest) {
-  const decoded = jwt.verifyRefreshToken(data.refreshToken);
-  const tokenHash = jwt.hashToken(data.refreshToken);
+export async function logoutUser(refreshToken: string) {
+  const decoded = jwt.verifyRefreshToken(refreshToken);
+  const tokenHash = jwt.hashToken(refreshToken);
 
   await repo.deleteRefreshTokenByHash(tokenHash);
   return { message: "Logged out successfully." };

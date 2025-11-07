@@ -23,4 +23,12 @@ export const config = {
   supportEmail: process.env.SUPPORT_EMAIL || "",
 
   redisUrl: process.env.REDIS_URL || "redis://localhost:6379",
+
+  // Cookie configuration
+  cookieAccessName: process.env.COOKIE_ACCESS_NAME || "accessToken",
+  cookieRefreshName: process.env.COOKIE_REFRESH_NAME || "refreshToken",
+  cookieSecure: process.env.NODE_ENV === "production", // HTTPS only in production
+  cookieSameSite:
+    (process.env.COOKIE_SAME_SITE as "strict" | "lax" | "none") || "lax",
+  cookieDomain: process.env.COOKIE_DOMAIN, // undefined = same domain only
 };

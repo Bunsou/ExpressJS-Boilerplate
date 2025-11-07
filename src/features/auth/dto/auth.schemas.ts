@@ -27,9 +27,8 @@ export const loginRequestSchema = z.object({
   email: emailSchema,
   password: z.string().min(1),
 });
-export const refreshTokenRequestSchema = z.object({
-  refreshToken: z.string().min(1),
-});
+// Refresh token and logout no longer need body params (cookies handle this)
+export const refreshTokenRequestSchema = z.object({});
 export const forgotPasswordRequestSchema = z.object({ email: emailSchema });
 export const verifyResetCodeRequestSchema = z.object({
   email: emailSchema,
@@ -73,8 +72,16 @@ const tokenSchema = z.object({
   expiresIn: z.number(),
 });
 export type UserProfile = z.infer<typeof userProfileSchema>;
+// Auth response no longer includes tokens in body (sent via cookies)
 export type AuthResponse = {
+  user: UserProfile;
+};
+// Token refresh response also no longer includes tokens in body
+export type TokenRefreshResponse = {
+  message: string;
+};
+// Internal type for service layer that still generates tokens
+export type TokenPairResult = {
   user: UserProfile;
   tokens: z.infer<typeof tokenSchema>;
 };
-export type TokenRefreshResponse = { tokens: z.infer<typeof tokenSchema> };

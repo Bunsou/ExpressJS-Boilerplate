@@ -4,7 +4,7 @@ import rateLimit from "express-rate-limit";
 import { AppError } from "../../../shared/utils/errorHandler";
 import {
   verifyAccessToken,
-  extractTokenFromHeader,
+  extractTokenFromCookie,
 } from "../services/jwt.service";
 import type { AuthenticatedRequest } from "../../../shared/types/auth.types";
 import { config } from "../../../shared/config/config";
@@ -16,7 +16,7 @@ export const requireAuth = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const token = extractTokenFromHeader(req.headers.authorization);
+    const token = extractTokenFromCookie(req.cookies, config.cookieAccessName);
     if (!token) throw new AppError("TOKEN_INVALID");
 
     const decoded = verifyAccessToken(token);

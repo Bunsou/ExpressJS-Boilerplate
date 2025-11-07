@@ -7,6 +7,11 @@ import * as authService from "../services/auth.service";
 import { findUserById } from "../repositories/auth.repository";
 import type { AuthenticatedRequest } from "../../../shared/types/auth.types";
 import type * as schemas from "../dto/auth.schemas";
+import {
+  setAuthCookies,
+  clearAuthCookies,
+} from "../../../shared/utils/cookieHandler";
+import { config } from "../../../shared/config/config";
 
 export const register = async (req: Request, res: Response) => {
   const result = await authService.registerUser(
@@ -31,26 +36,41 @@ export const resendVerificationEmail = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   const result = await authService.loginUser(req.body as schemas.LoginRequest);
-  sendSuccessResponse(res, result, "Login successful");
+  // Set authentication cookies
+  setAuthCookies(res, result.tokens.accessToken, result.tokens.refreshToken);
+  // Return only user data (tokens are in cookies)
+  sendSuccessResponse(res, { user: result.user }, "Login successful");
 };
 
 export const refreshToken = async (req: Request, res: Response) => {
-  const result = await authService.refreshAccessToken(
-    req.body as schemas.RefreshTokenRequest
-  );
-  sendSuccessResponse(res, result, "Tokens refreshed successfully");
+  // Extract refresh token from cookies
+  const refreshToken = req.cookies[config.cookieRefreshName];
+  if (!refreshToken)
+    throw new AppError("TOKEN_INVALID", "Refresh token not found");
+
+  const result = await authService.refreshAccessToken(refreshToken);
+  // Set new authentication cookies
+  setAuthCookies(res, result.tokens.accessToken, result.tokens.refreshToken);
+  sendSuccessResponse(res, null, "Tokens refreshed successfully");
 };
 
 export const logout = async (req: Request, res: Response) => {
-  const result = await authService.logoutUser(
-    req.body as schemas.RefreshTokenRequest
-  );
+  // Extract refresh token from cookies
+  const refreshToken = req.cookies[config.cookieRefreshName];
+  if (!refreshToken)
+    throw new AppError("TOKEN_INVALID", "Refresh token not found");
+
+  const result = await authService.logoutUser(refreshToken);
+  // Clear authentication cookies
+  clearAuthCookies(res);
   sendSuccessResponse(res, null, result.message);
 };
 
 export const logoutAll = async (req: AuthenticatedRequest, res: Response) => {
   if (!req.user) throw new AppError("TOKEN_INVALID");
   const result = await authService.logoutFromAllDevices(req.user.id);
+  // Clear authentication cookies
+  clearAuthCookies(res);
   sendSuccessResponse(res, null, result.message);
 };
 
